@@ -7,7 +7,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
     cors: {
-        origin: '*',
+        origin: 'https://maps.jeremyduc.com',
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: '*',
         credentials: true
@@ -15,6 +15,13 @@ const io = socketIo(server, {
 });
 
 app.use(cors({ origin: '*', methods: ['GET', 'POST', 'PUT', 'DELETE'], allowedHeaders: '*', credentials: true }));
+
+app.use((req, res, next) => {
+    global.request = req;
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+    next();
+});
+
 app.use(express.json());
 app.use(express.static('public'));
 
